@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
+	t := "test\n\n\t\t\t\ttest"
 	fmt.Printf("%#v\n", os.Args)
 	fmt.Println(os.Args[0])
-	fmt.Println(len(os.Args))
+	fmt.Println(len(t))
 }
