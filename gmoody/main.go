@@ -19,4 +19,21 @@ func main() {
 	mood := rand.Intn(len(a))
 
 	fmt.Printf("current mood: %s\n", a[mood])
+
+	// compare arrays
+	a1 := [4]string{
+		"one",
+		"two",
+		"three",
+		"four",
+	}
+
+	a2 := [4]string{
+		"one",
+		"two",
+		"three",
+		"four",
+	}
+
+	fmt.Println(a1 == a2)
 }
