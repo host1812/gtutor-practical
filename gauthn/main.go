@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func usage() {
@@ -35,5 +36,11 @@ func main() {
 	} else {
 		fmt.Println("access denied")
 	}
+
+	n, err := strconv.Atoi("test")
+	if err != nil {
+		fmt.Printf("type: %T, value: %v", err, err)
+	}
+	fmt.Println(n)
 
 }
