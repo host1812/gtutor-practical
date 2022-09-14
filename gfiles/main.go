@@ -24,4 +24,14 @@ func main() {
 	for _, e := range dirInfos {
 		fmt.Println(e.Name())
 	}
+
+	fruits := []string{"banana", "apple", "orange"}
+	var output string
+	for _, f := range fruits {
+		output += fmt.Sprintf("%s\n", f)
+	}
+	err = os.WriteFile("./outputfile", []byte(output), 0644)
+	if err != nil {
+		fmt.Printf("error writing to file, err: %s", err)
+	}
 }
