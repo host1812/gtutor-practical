@@ -70,7 +70,8 @@ func main() {
 	r3.Name = "Again"
 	r3.JustForFun = nil
 	results := []Result{r1, r2, r3}
-	out, err := json.MarshalIndent(results, "", "\t")
+	// out, err := json.MarshalIndent(results, "", "\t")
+	out, err := json.Marshal(results)
 	if err != nil {
 		fmt.Printf("there was error marshalling object, err: %s", err)
 	}
