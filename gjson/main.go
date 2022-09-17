@@ -29,7 +29,7 @@ type Result struct {
 	Name      string
 	Type      int
 	Viewed    bool
-	Artifacts []Artifact `json:"-"`
+	Artifacts []Artifact
 	Tags
 	Authors
 	JustForFun `json:",omitempty"`
