@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -30,15 +31,16 @@ func parseRx(s string, r *regexp.Regexp) string {
 }
 
 func parseRx2(s string, r *regexp.Regexp) string {
-	// fmt.Println("debug:", r.FindStringSubmatch(s))
 	return r.ReplaceAllString(s, "")
 }
 
 func main() {
 	in := bufio.NewScanner(os.Stdin)
 	in.Split(bufio.ScanWords)
-	words := map[string]int{}
-	r, err := regexp.Compile(`[^a-z]+`)
+	words := []string{}
+	wordsStorage := map[string]int{}
+	// r, err := regexp.Compile(`[^a-z]+`)
+	r, err := regexp.Compile(`\b\w+\b`)
 	if err != nil {
 		fmt.Println("failed to compile regex")
 	}
@@ -46,11 +48,17 @@ func main() {
 		// w := parse(in.Text())
 		w := parseRx(in.Text(), r)
 		if w != "" {
-			words[w] += 1
+			if _, ok := wordsStorage[w]; !ok {
+				words = append(words, w)
+			}
+			wordsStorage[w] += 1
 		}
-
 	}
-	fmt.Println(words)
+	sort.Strings(words)
+	for _, w := range words {
+		fmt.Printf("%s: %d\n", w, wordsStorage[w])
+	}
+	// fmt.Println(words)
 	// pretty.Print(words)
 	// fmt.Println("scanned:", in.Text())
 	// file, err := os.Open("./sample")
@@ -68,4 +76,5 @@ func main() {
 	// if err := scanner.Err(); err != nil {
 	// 	log.Fatal(err)
 	// }
+
 }
