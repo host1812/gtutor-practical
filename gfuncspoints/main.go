@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	o "gjson/objects"
 )
 
@@ -29,5 +28,10 @@ func main() {
 		Authors:    o.Authors{"Alex", "Todd"},
 		JustForFun: o.JustForFun{1, 2, 3},
 	}
-	fmt.Println(r1)
+	r2 := newResultOnResult(&r1)
+	r2.Name = "New"
+	fmt.Printf("r1 addr: %p\n", &r1)
+	show(r1)
+	show(*r2)
+	fmt.Printf("r2 addr: %p\n", &r2)
 }
