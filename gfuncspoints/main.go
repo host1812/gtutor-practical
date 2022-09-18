@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	o "gjson/objects"
+	o "github.com/host1812/gtutor-practical/gjson/objects"
 )
 
 func main() {
@@ -28,10 +27,12 @@ func main() {
 		Authors:    o.Authors{"Alex", "Todd"},
 		JustForFun: o.JustForFun{1, 2, 3},
 	}
-	r2 := newResultOnResult(&r1)
-	r2.Name = "New"
-	fmt.Printf("r1 addr: %p\n", &r1)
-	show(r1)
-	show(*r2)
-	fmt.Printf("r2 addr: %p\n", &r2)
+	// r2 := newResultOnResult(&r1)
+	// r2.Name = "New"
+	// fmt.Printf("r1 addr: %p\n", &r1)
+	r1.Print()
+	r1.Rename("Test")
+	r1.Print()
+	// show(*r2)
+	// fmt.Printf("r2 addr: %p\n", &r2)
 }
