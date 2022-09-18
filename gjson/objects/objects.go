@@ -39,7 +39,7 @@ type Tags map[string]string
 type Authors []string
 type JustForFun []int
 
-func (r Result) Print() {
+func (r Result) PrintResult() {
 	const offset = "  "
 	fmt.Printf("Results Name: %s\n", r.Name)
 	fmt.Printf(offset + "Artifacts in results:\n")

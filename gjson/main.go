@@ -36,6 +36,7 @@ func main() {
 	r2.Name = "Other"
 	r3 := r1
 	r3.Name = "Again"
+	r3.PrintResult()
 	r3.JustForFun = nil
 	results := []o.Result{r1, r2, r3}
 	// out, err := json.MarshalIndent(results, "", "\t")
