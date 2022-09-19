@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"sort"
 )
 
@@ -27,7 +29,12 @@ func main() {
 
 	alive := EntityList{h1, a1}
 	sort.Sort(alive)
-	fmt.Println(alive)
+	// fmt.Println(alive)
 	sort.Sort(ByAge(alive))
-	fmt.Println(alive)
+	// fmt.Println(alive)
+	data, err := json.MarshalIndent(alive, "", "  ")
+	if err != nil {
+		log.Fatalf("failed to marshal an object, err: %s\n", err)
+	}
+	fmt.Println(string(data))
 }

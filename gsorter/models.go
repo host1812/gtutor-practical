@@ -82,3 +82,8 @@ func (e EntityList) Swap(i, j int) {
 func (e ByAgeList) Less(i, j int) bool {
 	return e.EntityList[i].GetEntity().Age < e.EntityList[j].GetEntity().Age
 }
+
+func (a Animal) MarshalJSON() (data []byte, _ error) {
+	data = []byte(fmt.Sprintf("{\"age\": %d, \"name\": \"%s\"}", a.Entity.Age, a.GetEntity().Name))
+	return
+}
