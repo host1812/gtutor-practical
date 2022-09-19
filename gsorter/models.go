@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Entity struct {
 	Id   int
 	Name string
@@ -7,56 +9,59 @@ type Entity struct {
 }
 
 type Human struct {
-	Entity
-	IQ   int
-	Race string
+	Entity *Entity
+	IQ     int
+	Race   string
 }
 
 type Animal struct {
-	Entity
+	Entity  *Entity
 	Legs    int
 	SubType string
 }
 
 type Comparable interface {
-	ById() int
-	ByName() string
+	GetEntity() *Entity
 }
 
-func (e Entity) ById() int {
-	return e.Id
+func (h Human) GetEntity() *Entity {
+	return h.Entity
 }
 
-func (e Entity) ByName() string {
-	return e.Name
+func (a Animal) GetEntity() *Entity {
+	return a.Entity
 }
 
-func (e Human) ById() int {
-	return e.Id
+func (h Human) String() string {
+	return fmt.Sprintf(
+		"id: %d, name: %s, age: %d, iq: %d, race: %s",
+		h.Entity.Id,
+		h.Entity.Name,
+		h.Entity.Age,
+		h.IQ,
+		h.Race,
+	)
 }
 
-func (e Human) ByName() string {
-	return e.Name
-}
-
-func (e Animal) ById() int {
-	return e.Id
-}
-
-func (e Animal) ByName() string {
-	return e.Name
+func (a Animal) String() string {
+	return fmt.Sprintf(
+		"id: %d, name: %s, age: %d, legs: %d, subtype: %s",
+		a.Entity.Id,
+		a.Entity.Name,
+		a.Entity.Age,
+		a.Legs,
+		a.SubType,
+	)
 }
 
 type EntityList []Comparable
-
-type byName []Entity
 
 func (e EntityList) Len() int {
 	return len(e)
 }
 
 func (e EntityList) Less(i, j int) bool {
-	return e[i].ByName() < e[j].ByName()
+	return e[i].GetEntity().Age < e[j].GetEntity().Age
 }
 
 func (e EntityList) Swap(i, j int) {

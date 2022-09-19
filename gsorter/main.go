@@ -7,7 +7,7 @@ import (
 
 func main() {
 	h1 := Human{
-		Entity: Entity{
+		Entity: &Entity{
 			Id:   10,
 			Name: "Aggr",
 			Age:  30,
@@ -16,7 +16,7 @@ func main() {
 		Race: "Antropolog",
 	}
 	a1 := Animal{
-		Entity: Entity{
+		Entity: &Entity{
 			Id:   1,
 			Name: "Abbriviazor",
 			Age:  1092,
@@ -24,10 +24,10 @@ func main() {
 		Legs:    48,
 		SubType: "Eater",
 	}
-	alive := EntityList{h1, a1}
 
+	alive := EntityList{h1, a1}
 	sort.Sort(alive)
 	fmt.Println(alive)
 
-	t := byName(alive)
+	// t := byName(alive)
 }
