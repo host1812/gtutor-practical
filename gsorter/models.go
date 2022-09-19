@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type Entity struct {
 	Id   int
@@ -56,14 +59,26 @@ func (a Animal) String() string {
 
 type EntityList []Comparable
 
+type ByAgeList struct {
+	EntityList
+}
+
+func ByAge(e EntityList) sort.Interface {
+	return &ByAgeList{e}
+}
+
 func (e EntityList) Len() int {
 	return len(e)
 }
 
 func (e EntityList) Less(i, j int) bool {
-	return e[i].GetEntity().Age < e[j].GetEntity().Age
+	return e[i].GetEntity().Name < e[j].GetEntity().Name
 }
 
 func (e EntityList) Swap(i, j int) {
 	e[i], e[j] = e[j], e[i]
+}
+
+func (e ByAgeList) Less(i, j int) bool {
+	return e.EntityList[i].GetEntity().Age < e.EntityList[j].GetEntity().Age
 }

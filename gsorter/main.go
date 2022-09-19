@@ -28,6 +28,6 @@ func main() {
 	alive := EntityList{h1, a1}
 	sort.Sort(alive)
 	fmt.Println(alive)
-
-	// t := byName(alive)
+	sort.Sort(ByAge(alive))
+	fmt.Println(alive)
 }
