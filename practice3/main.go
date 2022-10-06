@@ -5,13 +5,16 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
 type ResultPerIp struct {
-	Total int
-	OK    int
-	Bad   int
+	Total   int
+	Good    int
+	Bad     int
+	UserErr int
+	URLs    map[string]int
 }
 
 type Result struct {
@@ -36,15 +39,34 @@ func GetLogStats(fileName string) Result {
 
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {
+		var good, bad, userErr int
 		line := sc.Text()
 		// log.Println("line: ", line)
 		fields := strings.Fields(line)
-		// result.IpRequests[fields[0]] = ResultPerIp{Total: 1}
+		responseCode, err := strconv.Atoi(fields[8])
+		if err != nil {
+			log.Panic("failed to get response code, err:", err)
+		}
+
+		if responseCode >= 200 && responseCode < 400 {
+			good = 1
+		} else if responseCode >= 400 && responseCode < 500 {
+			userErr = 1
+		} else {
+			bad = 1
+		}
+
 		if v, ok := result.IpRequests[fields[0]]; ok {
 			v.Total++
+			v.Good += good
+			v.Bad += bad
+			v.UserErr += userErr
 		} else {
 			result.IpRequests[fields[0]] = &ResultPerIp{
-				Total: 1,
+				Total:   1,
+				Good:    good,
+				Bad:     bad,
+				UserErr: userErr,
 			}
 		}
 		result.TotalLines++
