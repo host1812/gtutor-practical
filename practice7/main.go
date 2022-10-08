@@ -10,11 +10,12 @@ import (
 	"time"
 )
 
-const depth = 2
-const maxObjectsDir = 10
+const maxDepth = 3
+const minObjectsDir = 4
+const maxObjectsDir = 12
 const wordsFile = "/usr/share/dict/words"
 const rootDir = "./generated"
-const dirFactor = 20
+const dirFactor = 30
 
 func readWords() ([]string, error) {
 	var words []string
@@ -36,7 +37,7 @@ func getWord(words []string) string {
 
 func createDir() bool {
 	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(100) < 20
+	return rand.Intn(100) < dirFactor
 }
 
 func getRandomContent(words []string) string {
@@ -50,19 +51,31 @@ func getRandomContent(words []string) string {
 	return sb.String()
 }
 
-func createFile(dir string, words []string) error {
-	file := path.Join(dir, getWord(words))
-	f, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
+func createFileOrDir(dir string, words []string, depth int) error {
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < minObjectsDir+rand.Intn(maxObjectsDir-minObjectsDir); i++ {
+		if createDir() && depth < maxDepth {
+			directory := path.Join(dir, getWord(words))
+			err := os.Mkdir(directory, 0755)
+			if err != nil {
+				return err
+			}
+			log.Printf("%s - dir created\n", dir)
+			createFileOrDir(directory, words, depth+1)
+		} else {
+			file := path.Join(dir, getWord(words))
+			f, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY, 0644)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			log.Printf("%s - file created\n", file)
+			wr := bufio.NewWriter(f)
+			wr.WriteString(getRandomContent(words))
+			wr.Flush()
+			log.Printf("file content updated: %s\n", file)
+		}
 	}
-	defer f.Close()
-	log.Printf("file created: %s\n", file)
-
-	wr := bufio.NewWriter(f)
-	wr.WriteString(getRandomContent(words))
-	wr.Flush()
-	log.Printf("file content updated: %s\n", file)
 	return nil
 }
 
@@ -76,22 +89,8 @@ func generateFiles(words []string) error {
 		}
 		log.Printf("'%s' successfully created\n", rootDir)
 	}
-	for i := 0; i < 12; i++ {
-		if createDir() {
-			dir := path.Join(rootDir, getWord(words))
-			err = os.Mkdir(dir, 0755)
 
-			if err != nil {
-				return err
-			}
-			log.Printf("dir created: %s\n", dir)
-		} else {
-			err := createFile(rootDir, words)
-			if err != nil {
-				return nil
-			}
-		}
-	}
+	createFileOrDir(rootDir, words, 0)
 	return nil
 }
 
